@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="ERROR">
+
+	<Appenders>
+
+		<Console name="SysoutConsole" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{dd-MM-yyyy HH:mm:ss} [%-5p] %c{10}:%L - %m%n" />
+		</Console>
+
+		<Console name="SyserrConsole" target="SYSTEM_ERR">
+			<PatternLayout
+				pattern="%d{dd-MM-yyyy HH:mm:ss} [%-5p] %c{10}:%L - %m%n" />
+		</Console>
+
+		<RollingFile name="RollingFileError"
+			fileName="logs/error/error.log"
+			filePattern="logs/error/$${date:yyyy-MM}/error-%d{MM-dd-yyyy}-%i.log.gz">
+
+			<Filters>
+				<ThresholdFilter level="ERROR" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+
+			<PatternLayout>
+				<Pattern> %d{dd-MM-yyyy HH:mm:ss} [%-5p] %c{10}:%L - %m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100MB" />
+			</Policies>
+
+		</RollingFile>
+
+		<RollingFile name="RollingFileDebug"
+			fileName="logs/debug/debug.log"
+			filePattern="logs/debug/$${date:yyyy-MM}/debug-%d{MM-dd-yyyy}-%i.log.gz">
+
+			<Filters>
+				<MarkerFilter marker="DEBUG" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+
+			<PatternLayout>
+				<Pattern> %d{dd-MM-yyyy HH:mm:ss} [%-5p] %c{10}:%L - %m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100MB" />
+			</Policies>
+
+		</RollingFile>
+
+		<RollingFile name="RollingFileInfo"
+			fileName="logs/info/info.log"
+			filePattern="logs/info/$${date:yyyy-MM}/info-%d{MM-dd-yyyy}-%i.log.gz">
+
+			<Filters>
+				<MarkerFilter marker="INFO" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+
+			<PatternLayout>
+				<Pattern> %d{dd-MM-yyyy HH:mm:ss} [%-5p] %c{10}:%L - %m%n</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100MB" />
+			</Policies>
+
+		</RollingFile>
+
+	</Appenders>
+
+	<Loggers>
+
+		<Root level="ERROR">
+			<AppenderRef ref="RollingFileError" />
+			<AppenderRef ref="SysoutConsole" />
+		</Root>
+
+		<Logger name="com.tataplay.roe" additivity="false"
+			level="debug">
+			<AppenderRef ref="RollingFileInfo" level="info" />
+			<AppenderRef ref="RollingFileDebug" level="debug" />
+			<AppenderRef ref="RollingFileError" level="error" />
+
+			<AppenderRef ref="SysoutConsole" />
+		</Logger>
+
+	</Loggers>
+</Configuration>
